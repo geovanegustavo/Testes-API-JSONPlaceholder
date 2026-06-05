@@ -1,0 +1,145 @@
+{
+  "info": {
+    "_postman_id": "821eba7a-9448-419c-afe6-dcbb89002273",
+    "name": "Jsonplaceholder",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52626574",
+    "_collection_link": "https://go.postman.co/collection/52626574-821eba7a-9448-419c-afe6-dcbb89002273?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Listar Todos os Posts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/posts",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            },
+            "description": "Retrieves a list of all posts available in the API.\n\n**Method:** GET  \n**Endpoint:** `{{BASE_URL}}/posts`\n\n**Authentication:** Not required\n\n**Query Parameters:** None\n\n**Request Body:** None\n\n**Response:**  \nReturns a JSON array of post objects. Each object contains the following fields:\n\n| Field | Type | Description |\n| --- | --- | --- |\n| userId | integer | ID of the user who created the post |\n| id | integer | Unique identifier of the post |\n| title | string | Title of the post |\n| body | string | Content/body of the post |\n\n**Example Response (200 OK):**\n\n``` json\n[\n  {\n    \"userId\": 1,\n    \"id\": 1,\n    \"title\": \"sunt aut facere repellat provident occaecati excepturi optio reprehenderit\",\n    \"body\": \"quia et suscipit\\nsuscipit recusandae consequuntur expedita et cum\\nreprehenderit molestiae ut ut quas totam\\nnostrum rerum est autem sunt rem eveniet architecto\"\n  }\n]\n\n ```\n\n**Status Codes:**\n\n- `200 OK` — Posts retrieved successfully."
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Post 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Validar o Status Code básico (Se o servidor respondeu com sucesso)",
+                  "pm.test(\"Status code é 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "// 2. Definir o Schema (O Contrato que a API prometeu seguir)",
+                  "const contratoSchema = {",
+                  "    \"type\": \"object\",",
+                  "    \"required\": [\"userId\", \"id\", \"title\", \"body\"],",
+                  "    \"properties\": {",
+                  "        \"userId\": { \"type\": \"number\" },",
+                  "        \"id\": { \"type\": \"number\" },",
+                  "        \"title\": { \"type\": \"string\" },",
+                  "        \"body\": { \"type\": \"string\" }",
+                  "    }",
+                  "};",
+                  "",
+                  "// 3. Executar a validação do contrato usando a biblioteca Ajv (nativa do Postman)",
+                  "pm.test(\"Validar o Contrato da API (JSON Schema)\", function () {",
+                  "    var dadosDaResposta = pm.response.json();",
+                  "    if (Array.isArray(dadosDaResposta)) {",
+                  "        pm.expect(ajv.validate(dadosDaResposta[0], contratoSchema)).to.be.true;",
+                  "    } else {",
+                  "        pm.expect(ajv.validate(dadosDaResposta, contratoSchema)).to.be.true;",
+                  "    }",
+                  "});",
+                  "",
+                  "// Visualização da resposta",
+                  "var template = `",
+                  "<style>",
+                  "  body { font-family: Arial, sans-serif; padding: 20px; background: #f4f4f4; }",
+                  "  .card {",
+                  "    background: white;",
+                  "    border-radius: 8px;",
+                  "    padding: 20px;",
+                  "    max-width: 600px;",
+                  "    box-shadow: 0 2px 8px rgba(0,0,0,0.1);",
+                  "  }",
+                  "  .card h2 { color: #333; margin-bottom: 10px; }",
+                  "  .field { margin-bottom: 12px; }",
+                  "  .label { font-weight: bold; color: #555; font-size: 12px; text-transform: uppercase; }",
+                  "  .value { color: #222; margin-top: 4px; line-height: 1.5; }",
+                  "  .badge { display: inline-block; background: #6366f1; color: white; border-radius: 4px; padding: 2px 8px; font-size: 12px; }",
+                  "</style>",
+                  "<div class=\"card\">",
+                  "  <h2>Post #{{id}}</h2>",
+                  "  <div class=\"field\">",
+                  "    <div class=\"label\">User ID</div>",
+                  "    <div class=\"value\"><span class=\"badge\">{{userId}}</span></div>",
+                  "  </div>",
+                  "  <div class=\"field\">",
+                  "    <div class=\"label\">Title</div>",
+                  "    <div class=\"value\">{{title}}</div>",
+                  "  </div>",
+                  "  <div class=\"field\">",
+                  "    <div class=\"label\">Body</div>",
+                  "    <div class=\"value\">{{body}}</div>",
+                  "  </div>",
+                  "</div>",
+                  "`;",
+                  "",
+                  "var data = pm.response.json();",
+                  "pm.visualizer.set(template, {",
+                  "    id: data.id,",
+                  "    userId: data.userId,",
+                  "    title: data.title,",
+                  "    body: data.body",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/posts/1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "posts",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
