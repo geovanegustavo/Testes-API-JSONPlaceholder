@@ -99,6 +99,132 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Listar Comments",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const Ajv = require('ajv');\r",
+                  "const ajv = new Ajv();\r",
+                  "\r",
+                  "// 1. Validar o Status Code básico (Se o servidor respondeu com sucesso)\r",
+                  "pm.test(\"Status code é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// 2. Definir o Schema (O Contrato que a API prometeu seguir)\r",
+                  "const contratoSchema = {\r",
+                  "    \"type\": \"object\",\r",
+                  "    \"required\": [\"postId\", \"id\", \"name\", \"email\", \"body\"],\r",
+                  "    \"properties\": {\r",
+                  "        \"postId\": { \"type\": \"number\" },\r",
+                  "        \"id\": { \"type\": \"number\" },\r",
+                  "        \"name\": { \"type\": \"string\" },\r",
+                  "        \"email\": { \"type\": \"string\" },\r",
+                  "        \"body\": { \"type\": \"string\" }\r",
+                  "    }\r",
+                  "};\r",
+                  "\r",
+                  "// 3. Executar a validação do contrato usando a biblioteca Ajv (nativa do Postman)\r",
+                  "pm.test(\"Validar o Contrato da API (JSON Schema)\", function () {\r",
+                  "    var dadosDaResposta = pm.response.json();\r",
+                  "    if (Array.isArray(dadosDaResposta)) {\r",
+                  "        pm.expect(ajv.validate(dadosDaResposta[0], contratoSchema)).to.be.true;\r",
+                  "    } else {\r",
+                  "        pm.expect(ajv.validate(dadosDaResposta, contratoSchema)).to.be.true;\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/posts/1/comments",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "posts",
+                "1",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Comment Id 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const Ajv = require('ajv');\r",
+                  "const ajv = new Ajv();\r",
+                  "\r",
+                  "// 1. Validar o Status Code básico (Se o servidor respondeu com sucesso)\r",
+                  "pm.test(\"Status code é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// 2. Definir o Schema (O Contrato que a API prometeu seguir)\r",
+                  "const contratoSchema = {\r",
+                  "    \"type\": \"object\",\r",
+                  "    \"required\": [\"postId\", \"id\", \"name\", \"email\", \"body\"],\r",
+                  "    \"properties\": {\r",
+                  "        \"postId\": { \"type\": \"number\" },\r",
+                  "        \"id\": { \"type\": \"number\" },\r",
+                  "        \"name\": { \"type\": \"string\" },\r",
+                  "        \"email\": { \"type\": \"string\" },\r",
+                  "        \"body\": { \"type\": \"string\" }\r",
+                  "    }\r",
+                  "};\r",
+                  "\r",
+                  "// 3. Executar a validação do contrato usando a biblioteca Ajv (nativa do Postman)\r",
+                  "pm.test(\"Validar o Contrato da API (JSON Schema)\", function () {\r",
+                  "    var dadosDaResposta = pm.response.json();\r",
+                  "    if (Array.isArray(dadosDaResposta)) {\r",
+                  "        pm.expect(ajv.validate(dadosDaResposta[0], contratoSchema)).to.be.true;\r",
+                  "    } else {\r",
+                  "        pm.expect(ajv.validate(dadosDaResposta, contratoSchema)).to.be.true;\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/comments?postId=1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "comments"
+              ],
+              "query": [
+                {
+                  "key": "postId",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
