@@ -40,11 +40,11 @@ jobs:
         run: mkdir -p ./results
         
       # Runs a set of commands using the runners shell
-      - name: Step 3 Execute collection
-        run: newman run ./Jsonplaceholder-ci.json -e ./Jsonplaceholder-env.json --reporters cli, -r htmlextra --reporter-htmlextra-export ./results/Report.html
-   
+      - name: Step 4 Execute collection
+        run: newman run ./Jsonplaceholder-ci.json -e ./Jsonplaceholder-env.json --reporters cli, htmlextra --reporter-htmlextra-export ./results/Report.html
+
       # Runs a set of commands using the runners shell
-      - name: Step 4 Archive production artifacts
+      - name: Step 5 Archive production artifacts
         uses: actions/upload-artifact@v4
         with:
             name: report
