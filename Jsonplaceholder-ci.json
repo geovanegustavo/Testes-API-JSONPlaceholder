@@ -173,36 +173,38 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "const Ajv = require('ajv');\r",
-                  "const ajv = new Ajv();\r",
-                  "\r",
-                  "// 1. Validar o Status Code básico (Se o servidor respondeu com sucesso)\r",
+                  "// 1. Validar o Status Code\r",
                   "pm.test(\"Status code é 200\", function () {\r",
                   "    pm.response.to.have.status(200);\r",
                   "});\r",
                   "\r",
-                  "// 2. Definir o Schema (O Contrato que a API prometeu seguir)\r",
-                  "const contratoSchema = {\r",
-                  "    \"type\": \"object\",\r",
-                  "    \"required\": [\"postId\", \"id\", \"name\", \"email\", \"body\"],\r",
-                  "    \"properties\": {\r",
-                  "        \"postId\": { \"type\": \"number\" },\r",
-                  "        \"id\": { \"type\": \"number\" },\r",
-                  "        \"name\": { \"type\": \"string\" },\r",
-                  "        \"email\": { \"type\": \"string\" },\r",
-                  "        \"body\": { \"type\": \"string\" }\r",
+                  "// 2. Definir o Schema esperado\r",
+                  "const schema = {\r",
+                  "    \"type\": \"array\",\r",
+                  "    \"items\": {\r",
+                  "        \"type\": \"object\",\r",
+                  "        \"required\": [\"postId\", \"id\", \"name\", \"body\"],\r",
+                  "        \"properties\": {\r",
+                  "            \"userId\": { \"type\": \"number\" },\r",
+                  "            \"id\": { \"type\": \"number\" },\r",
+                  "            \"name\": { \"type\": \"string\" },\r",
+                  "            \"name\": { \"type\": \"string\" },\r",
+                  "            \"body\": { \"type\": \"string\" }\r",
+                  "        }\r",
                   "    }\r",
                   "};\r",
                   "\r",
-                  "// 3. Executar a validação do contrato usando a biblioteca Ajv (nativa do Postman)\r",
-                  "pm.test(\"Validar o Contrato da API (JSON Schema)\", function () {\r",
-                  "    var dadosDaResposta = pm.response.json();\r",
-                  "    if (Array.isArray(dadosDaResposta)) {\r",
-                  "        pm.expect(ajv.validate(dadosDaResposta[0], contratoSchema)).to.be.true;\r",
-                  "    } else {\r",
-                  "        pm.expect(ajv.validate(dadosDaResposta, contratoSchema)).to.be.true;\r",
-                  "    }\r",
-                  "});"
+                  "// 3. Inicializar Ajv\r",
+                  "const Ajv = require('ajv');\r",
+                  "const ajv = new Ajv();\r",
+                  "\r",
+                  "// 4. Validar o contrato\r",
+                  "pm.test(\"Validar o contrato da resposta (JSON Schema)\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const valid = ajv.validate(schema, jsonData);\r",
+                  "    pm.expect(valid, ajv.errorsText(ajv.errors)).to.be.true;\r",
+                  "});\r",
+                  ""
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -232,6 +234,146 @@
           "response": []
         }
       ]
+    },
+    {
+      "name": "Albums",
+      "item": [
+        {
+          "name": "Listar albums",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const Ajv = require('ajv');\r",
+                  "const ajv = new Ajv();\r",
+                  "\r",
+                  "// 1. Validar o Status Code básico (Se o servidor respondeu com sucesso)\r",
+                  "pm.test(\"Status code é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// 2. Definir o Schema (O Contrato que a API prometeu seguir)\r",
+                  "const contratoSchema = {\r",
+                  "    \"type\": \"object\",\r",
+                  "    \"required\": [\"userId\", \"id\", \"title\"],\r",
+                  "    \"properties\": {\r",
+                  "        \"userId\": { \"type\": \"number\" },\r",
+                  "        \"id\": { \"type\": \"number\" },\r",
+                  "        \"title\": { \"type\": \"string\" }\r",
+                  "    }\r",
+                  "};\r",
+                  "\r",
+                  "// 3. Executar a validação do contrato usando a biblioteca Ajv (nativa do Postman)\r",
+                  "pm.test(\"Validar o Contrato da API (JSON Schema)\", function () {\r",
+                  "    var dadosDaResposta = pm.response.json();\r",
+                  "    if (Array.isArray(dadosDaResposta)) {\r",
+                  "        pm.expect(ajv.validate(dadosDaResposta[0], contratoSchema)).to.be.true;\r",
+                  "    } else {\r",
+                  "        pm.expect(ajv.validate(dadosDaResposta, contratoSchema)).to.be.true;\r",
+                  "    }\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/albums",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "albums"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar album Id 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// 1. Validar o Status Code\r",
+                  "pm.test(\"Status code é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "// 2. Definir o Schema esperado\r",
+                  "const schema = {\r",
+                  "    \"type\": \"array\",\r",
+                  "    \"items\": {\r",
+                  "        \"type\": \"object\",\r",
+                  "        \"required\": [\"userId\", \"id\", \"title\"],\r",
+                  "        \"properties\": {\r",
+                  "            \"userId\": { \"type\": \"number\" },\r",
+                  "            \"id\": { \"type\": \"number\" },\r",
+                  "            \"title\": { \"type\": \"string\" }\r",
+                  "        }\r",
+                  "    }\r",
+                  "};\r",
+                  "\r",
+                  "// 3. Inicializar Ajv\r",
+                  "const Ajv = require('ajv');\r",
+                  "const ajv = new Ajv();\r",
+                  "\r",
+                  "// 4. Validar o contrato\r",
+                  "pm.test(\"Validar o contrato da resposta (JSON Schema)\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    const valid = ajv.validate(schema, jsonData);\r",
+                  "    pm.expect(valid, ajv.errorsText(ajv.errors)).to.be.true;\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{BASE_URL}}/albums/?id=1",
+              "host": [
+                "{{BASE_URL}}"
+              ],
+              "path": [
+                "albums",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "id",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Photos",
+      "item": []
+    },
+    {
+      "name": "Todos",
+      "item": []
+    },
+    {
+      "name": "Users",
+      "item": []
     }
   ]
 }
