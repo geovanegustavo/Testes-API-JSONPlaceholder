@@ -4,7 +4,7 @@
 	"values": [
 		{
 			"key": "BASE_URL",
-			"value": "",
+			"value": "https://jsonplaceholder.typicode.com/",
 			"type": "default",
 			"enabled": true
 		}
