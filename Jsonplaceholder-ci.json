@@ -99,7 +99,12 @@
             }
           },
           "response": []
-        },
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
         {
           "name": "Listar Comments",
           "event": [
